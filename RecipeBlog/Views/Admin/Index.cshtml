@@ -1,0 +1,9 @@
+﻿@model User
+
+<h1>
+    Hello @Model.Firstname @Model.Lastname
+    <form asp-controller="Admin" asp-action="Logout">
+        <button type="submit">Logout</button>
+    </form>
+
+</h1>

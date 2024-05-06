@@ -13,6 +13,10 @@ namespace RecipeBlog
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ModelContext>(x => x.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+            builder.Services.AddSession(
+            options =>
+            options.IdleTimeout = TimeSpan.FromMinutes(10)
+           );
 
             var app = builder.Build();
 
@@ -30,6 +34,7 @@ namespace RecipeBlog
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
