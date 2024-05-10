@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecipeBlog.Models;
 
@@ -20,7 +21,6 @@ public partial class Recipe
     public decimal? Price { get; set; }
 
     public string? Isaccepted { get; set; }
-
     public virtual Recipecategory? Category { get; set; }
 
     public virtual User? Chef { get; set; }

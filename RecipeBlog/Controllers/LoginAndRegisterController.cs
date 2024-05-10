@@ -94,13 +94,13 @@ namespace RecipeBlog.Controllers
                 }
                 else if (user.Roleid == 2)
                 {
-                    HttpContext.Session.SetInt32("UserId", (int)user.Userid);
-                    return RedirectToAction("Index", "User");
+                    HttpContext.Session.SetInt32("ChefId", (int)user.Userid);
+                    return RedirectToAction("Index", "Chef");
                 }
                 else if (user.Roleid == 3)
                 {
-                    HttpContext.Session.SetInt32("ChefId", (int)user.Userid);
-                    return RedirectToAction("Index", "Chef");
+                    HttpContext.Session.SetInt32("UserId", (int)user.Userid);
+                    return RedirectToAction("Index", "User");
                 }
             }
 
