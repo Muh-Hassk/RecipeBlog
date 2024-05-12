@@ -21,6 +21,8 @@ public partial class User
 
     public string Lastname { get; set; } = null!;
 
+    public string? Imagepath { get; set; }
+
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Reciperequest> Reciperequests { get; set; } = new List<Reciperequest>();

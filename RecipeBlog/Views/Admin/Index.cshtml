@@ -28,7 +28,6 @@
     </div>
 </div>
 <div class="row">
-
     <div class="col-md-6 grid-margin transparent">
         <div class="row">
             <div class="col-md-6 mb-4 stretch-card transparent">
@@ -42,16 +41,46 @@
             <div class="col-md-6 mb-4 stretch-card transparent">
                 <div class="card card-dark-blue">
                     <div class="card-body">
-                        <p class="mb-4"># of Registerd Chefs</p>
+                        <p class="mb-4"># of Registered Chefs</p>
                         <p class="fs-30 mb-2">@ViewBag.RegChefsCount</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 grid-margin transparent">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                <div class="card card-light-danger">
+                    <div class="card-body">
+                        <p class="mb-4">Total Sales</p>
+                        <p class="fs-30 mb-2">@ViewBag.TotalProfit $</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 stretch-card transparent">
+                <div class="card card-dark-blue">
+                    <div class="card-body">
+                        <p class="mb-4">Total Sales</p>
+                        <p class="fs-30 mb-2">@ViewBag.TotalSales Recipes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 grid-margin transparent">
+        <div class="row">
             <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
                 <div class="card card-light-blue">
                     <div class="card-body">
-                        <p class="mb-4">Number of Registerd Recipes</p>
-                        <p class="fs-30 mb-2"> @ViewBag.AcceptedRec</p>
+                        <p class="mb-4">Number of Registered Recipes</p>
+                        <p class="fs-30 mb-2">@ViewBag.AcceptedRec</p>
                     </div>
                 </div>
             </div>
@@ -63,9 +92,10 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
-</div>
+
 <div class="row"> 
 <div class="card mb-4">
     <div class="card-body">
@@ -117,7 +147,7 @@
                             <th>First name</th>
                             <th>Last name</th>
                             <th>Email</th>
-                            <th>Recipes Bought</th>
+                            <th>Recipes Shared</th>
                             <th>Registration Date</th>
                         </tr>
                     </thead>
@@ -129,6 +159,8 @@
                                 <td class="font-weight-bold">@user.Firstname</td>
                                 <td class="font-weight-bold">@user.Lastname</td>
                                 <td class="font-weight-bold">@user.Email</td>
+                                <td class="font-weight-bold">@user.Recipes.Count</td>
+
                                 <td class="font-weight-bold">@user.Registrationdate</td>
                             </tr>
                             }
@@ -139,10 +171,10 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mb-4">
     <div class="card">
         <div class="card-body">
-            <p class="card-title mb-0">Accepted Recipes</p>
+            <p class="card-title mb-4">Accepted Recipes</p>
             <div class="table-responsive">
                 <table class="table table-striped table-borderless">
                     <tbody>
@@ -177,7 +209,7 @@
 
                                 
 
-<div class="row">
+<div class="row mb-4">
     <div class="card">
         <div class="card-body">
             <p class="card-title mb-4">Recipes Sales</p>

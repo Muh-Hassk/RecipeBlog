@@ -1,0 +1,31 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row gy-5">
+    @foreach (var recipeInfo in ViewBag.RecipeInfo)
+    {
+        <div style="max-width: 300px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); margin: 20px auto; overflow: hidden; transition: transform 0.3s ease-in-out;">
+            <div style="border-radius: 10px 10px 0 0; overflow: hidden;">
+                <img src="https://via.placeholder.com/300" alt="Recipe Image" style="width: 100%; height: auto; display: block;">
+            </div>
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 10px;">
+                    <a href="#" style="color: #777; font-size: 14px; text-decoration: none; margin-right: 10px;">@recipeInfo.Recipe.Price$</a>
+                    <a href="#" style="color: #777; font-size: 14px; text-decoration: none;"> <span></span>@recipeInfo.Category.Categoryname</a>
+                </div>
+                <h3 style="font-size: 18px; margin-bottom: 10px;">@recipeInfo.Recipe.Recipename</h3>
+                <a  style="display: inline-block; background-color: #f1f1f1; color: #333; padding: 10px 20px; border-radius: 5px; margin-top: 10px; text-decoration: none;">Made By @recipeInfo.Chef.Username</a>
+                <div>
+                    <a  style="display: inline-block; background-color: #f1f1f1; color: #333; padding: 10px 20px; border-radius: 5px; margin-top: 10px; text-decoration: none;">What You need to cook it.<br />@recipeInfo.Recipe.Ingredients </a>
+                </div>
+                <div style="margin-top: 10px;">
+                    <form asp-controller="Admin" asp-action="UnActivateRecipe" method="post" style="display: inline-block;">
+                        <input type="hidden" name="recipeId" value="@recipeInfo.Recipe.Recipeid" />
+                        <button type="submit" style="background-color: #4caf50; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">UnActivate</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

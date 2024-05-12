@@ -93,6 +93,9 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.Chefid)
                 .HasColumnType("NUMBER")
                 .HasColumnName("CHEFID");
+            entity.Property(e => e.Createdate)
+                .HasColumnType("DATE")
+                .HasColumnName("CREATEDATE");
             entity.Property(e => e.Ingredients)
                 .HasColumnType("CLOB")
                 .HasColumnName("INGREDIENTS");
@@ -245,6 +248,10 @@ public partial class ModelContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("FIRSTNAME");
+            entity.Property(e => e.Imagepath)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("IMAGEPATH");
             entity.Property(e => e.Lastname)
                 .HasMaxLength(50)
                 .IsUnicode(false)
