@@ -10,9 +10,12 @@ namespace RecipeBlog.Controllers
     {
 
         private readonly ModelContext _context;
-        public LoginAndRegisterController(ModelContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public LoginAndRegisterController(ModelContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -80,7 +83,7 @@ namespace RecipeBlog.Controllers
                 return View();
             }
 
-            // Your login logic here to authenticate the user
+            //  login logic 
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == Username && u.Password == Password);
 
@@ -94,8 +97,18 @@ namespace RecipeBlog.Controllers
                 }
                 else if (user.Roleid == 2)
                 {
-                    HttpContext.Session.SetInt32("ChefId", (int)user.Userid);
-                    return RedirectToAction("Index", "Chef");
+                    // Check if the user has an image path
+                    if (!string.IsNullOrEmpty(user.Imagepath))
+                    {
+                        HttpContext.Session.SetInt32("ChefId", (int)user.Userid);
+                        return RedirectToAction("Index", "Chef");
+                    }
+                    else
+                    {
+                        // Redirect to make him upload image
+                        HttpContext.Session.SetInt32("imgId", (int)user.Userid);
+                        return RedirectToAction("UploadImage", "LoginAndRegister");
+                    }
                 }
                 else if (user.Roleid == 3)
                 {
@@ -108,5 +121,42 @@ namespace RecipeBlog.Controllers
             ModelState.AddModelError("", "Username or Password is incorrect.");
             return View();
         }
+
+        public IActionResult UploadImage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormFile imageFile)
+        {
+            var id = HttpContext.Session.GetInt32("imgId");
+            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                string wwwrootpath = _webHostEnvironment.WebRootPath;
+                string imageName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                string fullPath = Path.Combine(wwwrootpath, "images", imageName);
+
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                user.Imagepath = imageName;
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                HttpContext.Session.Remove("imgId");
+                HttpContext.Session.SetInt32("ChefId", (int)user.Userid);
+                return RedirectToAction("Index", "Chef");
+
+            }
+
+            return View();
+        }
+
+
     }
 }

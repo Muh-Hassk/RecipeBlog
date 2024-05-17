@@ -1,10 +1,80 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
+
 }
+<section id="menu" class="menu">
+    <div class="container" data-aos="fade-up">
 
+        <div class="section-header">
+            <h2>Our Menu</h2>
+            <p>Check Our <span>Yummy Menu</span></p>
+        </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-@category.Categoryid">
+                        <h4>@category.Categoryname</h4>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <div class="tab-pane fade" id="menu-@category.Categoryid">
+                    <div class="tab-header text-center">
+                        <p>Menu</p>
+                        <h3>@category.Categoryname</h3>
+                    </div>
+                    <div class="row gy-5">
+                        @foreach (var recipe in category.Recipes)
+                        {
+                            <div class="col-lg-4 menu-item">
+                                <h4>@recipe.Recipename</h4>
+                                <p class="ingredients">@recipe.Ingredients</p>
+                                <p class="price">$@recipe.Price</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</section>
+
+<section id="chefs" class="chefs section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Chefs</h2>
+            <p>Our <span>Professional</span> Chefs</p>
+        </div>
+
+        <div class="row gy-4">
+            @foreach (var chef in ViewBag.Chefs)
+            {
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chef-member">
+                        <div class="member-img">
+                            <img src=@Url.Content("~/images/"+chef.Imagepath) class="img-fluid" alt="">
+                            
+                        </div>
+                        <div class="member-info">
+                            <h4>@chef.Firstname @chef.Lastname</h4>
+                           @*  <span>@chef.Specialization</span>
+                            <p>@chef.Description</p> *@
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End Chefs Member -->
+            }
+        </div>
+
+    </div>
+</section><!-- End Chefs Section -->

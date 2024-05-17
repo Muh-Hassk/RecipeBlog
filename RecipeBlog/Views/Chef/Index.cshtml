@@ -1,10 +1,93 @@
 ﻿@model User
+@{
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+<section id="hero" class="hero d-flex align-items-center section-bg">
+    <div class="container">
+        <div class="row justify-content-between gy-5">
+            <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center align-items-center align-items-lg-start text-center text-lg-start">
+                <h2 data-aos="fade-up">Add Your Own<br>Recipes And Earn Money!</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Welcome to Chefs Home Page @Model.Firstname @Model.Lastname</p>
+            </div>
+            <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
+                <img src="~/Home/assets/img/hero-img.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
+            </div>
+        </div>
+    </div>
+</section><!-- End Hero Section -->
 
-<h1>
-    This is Chef Page.
-    Hello @Model.Firstname @Model.Lastname
-    <form asp-controller="Chef" asp-action="Logout">
-        <button type="submit">Logout</button>
-    </form>
+<section id="menu" class="menu">
+    <div class="container" data-aos="fade-up">
 
-</h1>
+        <div class="section-header">
+            <h2>Our Recipes</h2>
+            <p>Check Our <span>Yummy Recipes</span></p>
+            <p> <a asp-action="ViewAll"> <span> VIEW ALL RECIPES</span></a> </p>
+        </div>
+
+        <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-@category.Categoryid">
+                        <h4>@category.Categoryname</h4>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <div class="tab-pane fade" id="menu-@category.Categoryid">
+                    <div class="tab-header text-center">
+                        <p>Menu</p>
+                        <h3>@category.Categoryname</h3>
+                    </div>
+                    <div class="row gy-5">
+                        @foreach (var recipe in category.Recipes)
+                        {
+                            <div class="col-lg-4 menu-item">
+                                <h4>@recipe.Recipename</h4>
+                                <p class="ingredients">@recipe.Ingredients</p>
+                                <p class="price">$@recipe.Price</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</section>
+
+<section id="chefs" class="chefs section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Chefs</h2>
+            <p>Our <span>Professional</span> Chefs</p>
+        </div>
+
+        <div class="row gy-4">
+            @foreach (var chef in ViewBag.Chefs)
+            {
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chef-member">
+                        <div class="member-img">
+                            <img src=@Url.Content("~/images/"+chef.Imagepath) class="img-fluid" alt="">
+
+                        </div>
+                        <div class="member-info">
+                            <h4>@chef.Firstname @chef.Lastname</h4>
+                            <a asp-action="ChefRecipe" asp-route-chefId="@chef.Userid">Click Here To See All @chef.Username Recipes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End Chefs Member -->
+            }
+        </div>
+
+    </div>
+</section><!-- End Chefs Section -->

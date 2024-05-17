@@ -1,0 +1,137 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+<style>
+    .card {
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 20px;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+        height: 250px; /* Adjust the height as needed */
+        width: 300px;
+        overflow: hidden;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 15px;
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+    .search-form-container {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-input {
+        flex: 1;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .search-button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .section-header {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 0;
+            color: #333;
+        }
+
+        .section-header p {
+            margin-bottom: 0;
+            font-size: 25px;
+            color: #777;
+        }
+</style>
+
+       
+<section id="recipes" class="recipes section-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="search-form-container">
+            <form action="@Url.Action("ViewAll", "Chef")" method="get" class="search-form">
+                <input type="text" class="form-control search-input" placeholder="Search recipes" id="searchInput" name="search" value="@Context.Request.Query["search"]">
+                <button type="submit" class="btn btn-primary search-button">Search</button>
+            </form>
+        </div>
+
+        <div class="section-header">
+            <h2>Recipes</h2>
+            <p>Our <span>Delicious</span> Recipes</p>
+        </div>
+
+        <div class="row gy-5">
+            @foreach (var recipeInfo in ViewBag.Recipes)
+            {
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card mt-6">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Recipe Image">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">@recipeInfo.Category.Categoryname</span>
+                                <span class="badge bg-primary">@recipeInfo.Recipe.Price$</span>
+                            </div>
+                            <h5 class="card-title">@recipeInfo.Recipe.Recipename</h5>
+                            <p class="card-text">Made By @recipeInfo.Chef.Username</p>
+                            <div>
+                                <a style="display: inline-block; background-color: #f1f1f1; color: #333; padding: 10px 20px; border-radius: 5px; margin-top: 10px; text-decoration: none;">What You need to cook it.<br />@recipeInfo.Recipe.Ingredients </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</section>

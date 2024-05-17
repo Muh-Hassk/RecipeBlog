@@ -248,16 +248,16 @@ namespace RecipeBlog.Controllers
             if (recipe != null)
             {
                 // Update the IsAccepted property
-                recipe.Isaccepted = "No"; // Assuming IsAccepted is a string property
+                recipe.Isaccepted = "No"; 
 
                 // Save changes to the database
                 _context.SaveChanges();
 
-                // Redirect to the same page or another page
+                // Redirect to the same page
                 return RedirectToAction("Recipes");
             }
 
-            // Handle error if the recipe is not found
+            // Handle error
             return NotFound();
         }
 
@@ -271,16 +271,16 @@ namespace RecipeBlog.Controllers
             if (recipe != null)
             {
                 // Update the IsAccepted property
-                recipe.Isaccepted = "Yes"; // Assuming IsAccepted is a string property
+                recipe.Isaccepted = "Yes";
 
                 // Save changes to the database
                 _context.SaveChanges();
 
-                // Redirect to the same page or another page
+                // Redirect to the same page
                 return RedirectToAction("ApproveRecipe");
             }
 
-            // Handle error if the recipe is not found
+           
             return NotFound();
         }
         [HttpPost]
@@ -307,10 +307,10 @@ namespace RecipeBlog.Controllers
 
         public IActionResult Logout()
         {
-            // Remove the specific session variable "ChefId"
+            // Remove the specific session variable "Admin"
             HttpContext.Session.Remove("AdminId");
 
-            // Redirect to the login page or any other desired page
+            // Redirect to the home page
             return RedirectToAction("Index", "Home");
         }
 

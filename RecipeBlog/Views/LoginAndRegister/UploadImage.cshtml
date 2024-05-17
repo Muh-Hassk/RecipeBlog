@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef Profile Image Upload</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RecipeBlog.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .jumbotron {
+            background-color: #f8f9fa;
+            padding: 2rem 1rem;
+        }
+
+        h1, p {
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .custom-file {
+            margin: 0 auto; /* Center the form horizontally */
+            max-width: 400px; /* Limit form width for readability */
+        }
+
+        .btn-container {
+            text-align: center; /* Center the button */
+            margin-top: 20px; /* Add margin-top to the button */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome, Chef!</h1>
+            <p class="lead">To enhance your presence on our website, please upload a profile image.</p>
+            <hr class="my-4">
+            <form method="post" asp-action="UploadImage" enctype="multipart/form-data">
+                <div class="custom-file mb-3">
+                    <input type="file" class="form-control" id="customFile" name="imageFile" accept="image/*" required>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary btn-lg">Upload Image</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</body>
+</html>

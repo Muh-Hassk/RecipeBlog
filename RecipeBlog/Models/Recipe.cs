@@ -23,6 +23,8 @@ public partial class Recipe
 
     public DateTime? Createdate { get; set; }
 
+    public string? Imagepath { get; set; }
+
     public virtual Recipecategory? Category { get; set; }
 
     public virtual User? Chef { get; set; }
