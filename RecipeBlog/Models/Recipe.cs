@@ -21,7 +21,7 @@ public partial class Recipe
 
     public string? Isaccepted { get; set; }
 
-    public DateTime? Createdate { get; set; }
+    public DateTime Createdate { get; set; }
 
     public string? Imagepath { get; set; }
 

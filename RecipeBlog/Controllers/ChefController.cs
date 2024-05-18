@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeBlog.Models;
 
@@ -7,10 +8,13 @@ namespace RecipeBlog.Controllers
     public class ChefController : Controller
     {
         private readonly ModelContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ChefController(ModelContext? context)
+        public ChefController(ModelContext? context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+
         }
         public IActionResult Index()
         {
@@ -21,7 +25,7 @@ namespace RecipeBlog.Controllers
                 return RedirectToAction("Index", "Home");
             }
             // Retrieve RecipeCategories and Recipes from the database
-            var recipeCategories = _context.Recipecategories.Include(rc => rc.Recipes).ToList();
+            var recipeCategories = _context.Recipecategories.Include(rc => rc.Recipes.Where(x=>x.Isaccepted == "Yes")).ToList();
 
             // Pass the data to the view
             ViewBag.RecipeCategories = recipeCategories;
@@ -40,14 +44,65 @@ namespace RecipeBlog.Controllers
         public IActionResult AddRecipe()
         {
             var id = HttpContext.Session.GetInt32("ChefId");
-            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            var user = _context.Users.SingleOrDefault(x => x.Userid == id);
             if (user == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-           
-            return View(user);
+
+            var newRecipe = new Recipe();
+
+            ViewBag.Category = _context.Recipecategories.ToList();
+
+            // Optionally, you can initialize properties of the new recipe here if needed
+
+            return View(newRecipe);
         }
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> AddRecipe(Recipe newRecipe, IFormFile imageFile)
+        {
+            var id = HttpContext.Session.GetInt32("ChefId");
+            var user = _context.Users.SingleOrDefault(x => x.Userid == id);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Process the image file if it's provided
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    string wwwrootpath = _webHostEnvironment.WebRootPath;
+                    string imageName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                    string fullPath = Path.Combine(wwwrootpath, "images", imageName);
+
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    newRecipe.Imagepath = imageName;
+                }
+
+                newRecipe.Isaccepted = "No";
+                newRecipe.Chefid = user.Userid;
+
+                // Save the new recipe to the database
+                _context.Recipes.Add(newRecipe);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("YourRecipes", "Chef"); // Redirect to your recipes page or any other page
+            }
+
+            // If the model state is not valid, re-populate ViewBag.Category and return the view with validation errors
+            ViewBag.Category = _context.Recipecategories.ToList();
+            return View(newRecipe);
+        }
+
+
+
 
         public IActionResult ChefRecipe(int chefId)
         {
@@ -68,7 +123,7 @@ namespace RecipeBlog.Controllers
 
             ViewBag.Recipes = recipeInfoList;
             ViewBag.Chef  = _context.Users.Where(x => x.Userid == chefId).SingleOrDefault();
-            ; // Pass chefId to the view
+             // Pass chefId to the view
 
 
             return View(user);
@@ -102,6 +157,8 @@ namespace RecipeBlog.Controllers
 
             ViewBag.Recipes = recipeInfoList.ToList();
             ViewBag.ChefId = chefId; // Pass chefId to the view
+            ViewBag.Chef = _context.Users.Where(x => x.Userid == chefId).SingleOrDefault();
+
 
             return View(user);
         }

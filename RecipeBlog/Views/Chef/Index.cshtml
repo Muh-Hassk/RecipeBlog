@@ -48,6 +48,7 @@
                         @foreach (var recipe in category.Recipes)
                         {
                             <div class="col-lg-4 menu-item">
+                                <img src=@Url.Content("~/images/"+@recipe.Imagepath) class="card-img-top" alt="Recipe Image">
                                 <h4>@recipe.Recipename</h4>
                                 <p class="ingredients">@recipe.Ingredients</p>
                                 <p class="price">$@recipe.Price</p>

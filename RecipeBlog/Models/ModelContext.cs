@@ -94,6 +94,7 @@ public partial class ModelContext : DbContext
                 .HasColumnType("NUMBER")
                 .HasColumnName("CHEFID");
             entity.Property(e => e.Createdate)
+                .HasDefaultValueSql("SYSDATE ")
                 .HasColumnType("DATE")
                 .HasColumnName("CREATEDATE");
             entity.Property(e => e.Imagepath)

@@ -1,0 +1,92 @@
+﻿@model Recipe
+@{
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+
+<style>
+    .form-card {
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 20px;
+    }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .form-card-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+</style>
+<section id="recipes" class="recipes section-bg mt-4">
+    <div class="container">
+        <div class="section-header">
+            <p>Add <span>New Delicious</span> Recipe</p>
+        </div>
+        <hr />
+        <div class="form-card">
+            <div class="form-card-body">
+                <form asp-action="AddRecipe" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="recipename">Recipe Name</label>
+                        <input type="text" class="form-control" id="recipename" name="Recipename" value="@Model.Recipename" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select class="form-control" id="category" name="Categoryid" required>
+                            <option value="">Select a category</option>
+                            @foreach (var category in ViewBag.Category)
+                            {
+                                <option value="@category.Categoryid">@category.Categoryname</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients</label>
+                        <textarea class="form-control" id="ingredients" name="Ingredients" rows="3" required>@Model.Ingredients</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Instructions</label>
+                        <textarea class="form-control" id="instructions" name="Instructions" rows="5" required>@Model.Instructions</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" class="form-control" id="price" name="Price" value="@Model.Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Recipe Image</label>
+                        <input type="file" class="form-control" id="imageFile" name="imageFile" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Recipe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
