@@ -59,7 +59,6 @@ namespace RecipeBlog.Controllers
             return View(newRecipe);
         }
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> AddRecipe(Recipe newRecipe, IFormFile imageFile)
         {
             var id = HttpContext.Session.GetInt32("ChefId");

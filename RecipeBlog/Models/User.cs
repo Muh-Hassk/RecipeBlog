@@ -23,6 +23,8 @@ public partial class User
 
     public string? Imagepath { get; set; }
 
+    public virtual ICollection<Cardinfo> Cardinfos { get; set; } = new List<Cardinfo>();
+
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<Reciperequest> Reciperequests { get; set; } = new List<Reciperequest>();

@@ -15,6 +15,8 @@ public partial class ModelContext : DbContext
     {
     }
 
+    public virtual DbSet<Cardinfo> Cardinfos { get; set; }
+
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Recipe> Recipes { get; set; }
@@ -40,6 +42,40 @@ public partial class ModelContext : DbContext
         modelBuilder
             .HasDefaultSchema("C##RECBLOG")
             .UseCollation("USING_NLS_COMP");
+
+        modelBuilder.Entity<Cardinfo>(entity =>
+        {
+            entity.HasKey(e => e.Cardid).HasName("SYS_C008383");
+
+            entity.ToTable("CARDINFO");
+
+            entity.Property(e => e.Cardid)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("NUMBER")
+                .HasColumnName("CARDID");
+            entity.Property(e => e.Balance)
+                .HasColumnType("NUMBER")
+                .HasColumnName("BALANCE");
+            entity.Property(e => e.Cardholdername)
+                .HasMaxLength(255)
+                .HasColumnName("CARDHOLDERNAME");
+            entity.Property(e => e.Cardnumber)
+                .HasMaxLength(255)
+                .HasColumnName("CARDNUMBER");
+            entity.Property(e => e.Cvv)
+                .HasMaxLength(255)
+                .HasColumnName("CVV");
+            entity.Property(e => e.Expirydate)
+                .HasColumnType("DATE")
+                .HasColumnName("EXPIRYDATE");
+            entity.Property(e => e.Userid)
+                .HasColumnType("NUMBER")
+                .HasColumnName("USERID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Cardinfos)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("SYS_C008384");
+        });
 
         modelBuilder.Entity<Payment>(entity =>
         {

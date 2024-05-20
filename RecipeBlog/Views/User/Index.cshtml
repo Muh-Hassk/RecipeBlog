@@ -1,10 +1,217 @@
 ﻿@model User
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<section id="hero" class="hero d-flex align-items-center section-bg">
+    <div class="container">
+        <div class="row justify-content-between gy-5">
+            <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center align-items-center align-items-lg-start text-center text-lg-start">
+                <h2 data-aos="fade-up">Add Your Own<br>Recipes And Earn Money!</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Welcome to Chefs Home Page @Model.Firstname @Model.Lastname</p>
+            </div>
+            <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
+                <img src="~/Home/assets/img/hero-img.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
+            </div>
+        </div>
+    </div>
+</section><!-- End Hero Section -->
+<!-- ======= About Section ======= -->
+<section id="about" class="about">
+    <div class="container" data-aos="fade-up">
 
-<h1>
-    This is User Page.
-    Hello @Model.Firstname @Model.Lastname
-    <form asp-controller="User" asp-action="Logout">
-        <button type="submit">Logout</button>
-    </form>
+        <div class="section-header">
+            <h2>About Us</h2>
+            <p>Learn More <span>About Us</span></p>
+        </div>
 
-</h1>
+        <div class="row gy-4">
+            <div class="col-lg-7 position-relative about-img" style="background-image: url(/Home/assets/img/about.jpg) ;" data-aos="fade-up" data-aos-delay="150">
+                
+            </div>
+            <div class="col-lg-5 d-flex align-items-end" data-aos="fade-up" data-aos-delay="300">
+                <div class="content ps-0 ps-lg-5">
+                    <p class="fst-italic">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                    </p>
+                    <ul>
+                        <li><i class="bi bi-check2-all"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                        <li><i class="bi bi-check2-all"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
+                        <li><i class="bi bi-check2-all"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
+                    </ul>
+                    <p>
+                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident
+                    </p>
+
+                    <div class="position-relative mt-4">
+                        <img src="~/Home/assets/img/about-2.jpg" class="img-fluid" alt="">
+                        <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox play-btn"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section><!-- End About Section -->
+
+
+<section id="menu" class="menu">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Our Recipes</h2>
+            <p>Check Our <span>Yummy Recipes</span></p>
+            <p> <a asp-action="ViewAll"> <span> VIEW ALL RECIPES</span></a> </p>
+        </div>
+
+        <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-@category.Categoryid">
+                        <h4>@category.Categoryname</h4>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
+            @foreach (var category in ViewBag.RecipeCategories)
+            {
+                <div class="tab-pane fade" id="menu-@category.Categoryid">
+                    <div class="tab-header text-center">
+                        <p>Menu</p>
+                        <h3>@category.Categoryname</h3>
+                    </div>
+                    <div class="row gy-5">
+                        @foreach (var recipe in category.Recipes)
+                        {
+                            <div class="col-lg-4 menu-item">
+                                <img src=@Url.Content("~/images/"+@recipe.Imagepath) class="card-img-top" alt="Recipe Image">
+                                <h4>@recipe.Recipename</h4>
+                                <p class="ingredients">@recipe.Ingredients</p>
+                                <p class="price">$@recipe.Price</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</section>
+
+<section id="chefs" class="chefs section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Chefs</h2>
+            <p>Our <span>Professional</span> Chefs</p>
+        </div>
+
+        <div class="row gy-4">
+            @foreach (var chef in ViewBag.Chefs)
+            {
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chef-member">
+                        <div class="member-img">
+                            <img src=@Url.Content("~/images/"+chef.Imagepath) class="img-fluid" alt="">
+
+                        </div>
+                        <div class="member-info">
+                            <h4>@chef.Firstname @chef.Lastname</h4>
+                            <a asp-action="ChefRecipe" asp-route-chefId="@chef.Userid">Click Here To See All @chef.Username Recipes</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End Chefs Member -->
+            }
+        </div>
+
+    </div>
+</section><!-- End Chefs Section -->
+
+<section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Testimonials</h2>
+            <p>What Are They <span>Saying About Us</span></p>
+        </div>
+
+        <div class="slides-1 swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+                    <div class="testimonial-item">
+                        <div class="row gy-4 justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="testimonial-content">
+                                    <p>
+                                        <i class="bi bi-quote quote-icon-left"></i>
+                                        Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                                        <i class="bi bi-quote quote-icon-right"></i>
+                                    </p>
+                                    <h3>Saul Goodman</h3>
+                                    <h4>Ceo &amp; Founder</h4>
+                                    <div class="stars">
+                                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 text-center">
+                                <img src="~/Home/assets/img/testimonials/testimonials-1.jpg" class="img-fluid testimonial-img" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->
+
+                <div class="swiper-slide">
+                    <div class="testimonial-item">
+                        <div class="row gy-4 justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="testimonial-content">
+                                    <p>
+                                        <i class="bi bi-quote quote-icon-left"></i>
+                                        Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                                        <i class="bi bi-quote quote-icon-right"></i>
+                                    </p>
+                                    <h3>Sara Wilsson</h3>
+                                    <h4>Designer</h4>
+                                    <div class="stars">
+                                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 text-center">
+                                <img src="~/Home/assets/img/testimonials/testimonials-2.jpg" class="img-fluid testimonial-img" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->
+
+                <div class="swiper-slide">
+                    <div class="testimonial-item">
+                        <div class="row gy-4 justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="testimonial-content">
+                                    <p>
+                                        <i class="bi bi-quote quote-icon-left"></i>
+                                        Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                                        <i class="bi bi-quote quote-icon-right"></i>
+                                    </p>
+                                    <h3>Jena Karlis</h3>
+                                    <h4>Store Owner</h4>
+                                    <div class="stars">
+                                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 text-center">
+                                <img src="~/Home/assets/img/testimonials/testimonials-3.jpg" class="img-fluid testimonial-img" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End testimonial item -->

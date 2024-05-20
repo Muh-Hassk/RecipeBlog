@@ -1,0 +1,105 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<style>
+    .container {
+        margin-top: 4rem;
+    }
+
+    .card {
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 85px;
+        margin-top: 100px;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: 60%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-body {
+        padding: 20px;
+        height: 290px; /* Adjust the height as needed */
+        width: 300px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Align items in the card body */
+    }
+
+    .text-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Ensure the container takes up the full height */
+    }
+
+
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #ec2727;
+        border-color: #dc3545;
+    }
+
+        .btn-primary:hover {
+            background-color: #dc3545;
+            border-color: #ec2727;
+        }
+</style>
+<div class="container">
+    <div class="row">
+        @if (ViewBag.Recipes != null)
+        {
+            foreach (var recipeInfo in ViewBag.Recipes)
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div class="card">
+                        <img src="@Url.Content("~/images/" + recipeInfo.Recipe.Imagepath)" alt="Recipe Image" class="card-img-top">
+                        <div class="card-body">
+                            <h2 class="card-title">@recipeInfo.Recipe.Recipename</h2>
+                            <p class="card-text"><strong>Category:</strong> @recipeInfo.Category.Categoryname</p>
+                            <p class="card-text"><strong>Ingredients:</strong> @recipeInfo.Recipe.Ingredients</p>
+                            <p class="card-text"><strong>Instructions:</strong> @recipeInfo.Recipe.Instructions</p>
+                            <p class="card-text"><strong>Price:</strong> $@recipeInfo.Recipe.Price</p>
+                        </div>
+                        <div class="text-center mb-3">
+                            <!-- Center the button -->
+                            <form action="@Url.Action("ProcessPurchase", "User")">
+                                <input type="hidden" name="recipeid" value="@recipeInfo.Recipe.Recipeid" />
+                                <button type="submit" class="btn btn-primary">Confirm Purchase</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-8 offset-md-2">
+                <h2>Recipe not found</h2>
+                <p>We couldn't find the recipe you're looking for. Please try again.</p>
+            </div>
+        }
+    </div>
+</div>

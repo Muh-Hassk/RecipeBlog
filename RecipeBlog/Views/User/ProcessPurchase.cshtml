@@ -1,0 +1,34 @@
+﻿@model Cardinfo
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Enter Card Information</h2>
+            <form asp-action="ProcessPurchase" method="POST">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input asp-for="Cardnumber" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="cardHolderName">Cardholder Name</label>
+                    <input asp-for="Cardholdername" type="text" class="form-control">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="expiryDate">Expiration Date</label>
+                        <input asp-for="Expirydate" type="month" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cvv">CVV</label>
+                        <input asp-for="Cvv" type="text" class="form-control">
+                    </div>
+                </div>
+                <input type="hidden" name="Recipeid" value="@ViewBag.Recipe.Recipeid" />
+                <button type="submit" class="btn btn-primary">Pay @ViewBag.Recipe.Price</button>
+            </form>
+        </div>
+    </div>
+</div>
