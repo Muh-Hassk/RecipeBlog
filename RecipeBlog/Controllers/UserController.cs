@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeBlog.Models;
+using System.Net.Mail;
+using System.Text;
 
 namespace RecipeBlog.Controllers
 {
@@ -199,7 +201,7 @@ namespace RecipeBlog.Controllers
         
             if (payments != null)
             {
-                return RedirectToAction("PaymentSuccess");
+                return RedirectToAction("PaymentSuccess", new { recipeid = recipe.Recipeid });
             }
 
             ViewBag.Recipe = recipe;
@@ -254,7 +256,7 @@ namespace RecipeBlog.Controllers
                 await _context.SaveChangesAsync(); // Use asynchronous SaveChangesAsync()
 
                 // Redirect the user to a page indicating a successful payment
-                return RedirectToAction("PaymentSuccess");
+                return RedirectToAction("PaymentSuccess", new { recipeid = recipe.Recipeid });
             }
             return View(card);
 
@@ -272,18 +274,85 @@ namespace RecipeBlog.Controllers
             return View();
         }
 
-        public IActionResult PaymentSuccess()
+        public async Task<IActionResult> PaymentSuccess(int recipeid)
         {
-            var id = HttpContext.Session.GetInt32("UserId");
-            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Recipeid == recipeid);
+            if (recipe == null)
+            {
+                // Handle the case where the recipe is not found
+                return RedirectToAction("RecipeNotFound");
+            }
+
+            ViewBag.Recipe = recipe;
+
+            // Retrieve the user's email address
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Userid == userId);
             if (user == null)
             {
+                // Handle the case where the user is not found
                 return RedirectToAction("Index", "Home");
             }
 
+            // Send recipe details to the user's email
+            await SendRecipeEmail(user.Email, recipe);
+
             return View();
         }
-        
+
+        // Method to send recipe details to user's email
+        // Method to send recipe details to user's email
+        private async Task SendRecipeEmail(string emailAddress, Recipe recipe)
+        {
+            StringBuilder emailContent = new StringBuilder();
+            emailContent.AppendLine("<html>");
+            emailContent.AppendLine("<head>");
+            emailContent.AppendLine("<style>");
+            emailContent.AppendLine("body { font-family: Arial, sans-serif; background-color: #f4f4f4; }");
+            emailContent.AppendLine(".container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }");
+            emailContent.AppendLine("h2 { color: #333; }");
+            emailContent.AppendLine("p { color: #666; }");
+            emailContent.AppendLine(".invoice { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 10px; }");
+            emailContent.AppendLine(".invoice p { margin: 5px 0; }");
+            emailContent.AppendLine("</style>");
+            emailContent.AppendLine("</head>");
+            emailContent.AppendLine("<body>");
+            emailContent.AppendLine("<div class='container'>");
+            emailContent.AppendLine("<h2>Recipe Details</h2>");
+            emailContent.AppendLine("<p><strong>Name:</strong> " + recipe.Recipename + "</p>");
+            emailContent.AppendLine("<p><strong>Ingredients:</strong> " + recipe.Ingredients + "</p>");
+            emailContent.AppendLine("<p><strong>Instructions:</strong> " + recipe.Instructions + "</p>");
+            emailContent.AppendLine("<div class='invoice'>");
+            emailContent.AppendLine("<h2>Invoice Details</h2>");
+            emailContent.AppendLine("<p><strong>Total Price:</strong> $" + recipe.Price + "</p>");
+            // Add more invoice details here if needed
+            emailContent.AppendLine("</div>");
+            emailContent.AppendLine("</div>");
+            emailContent.AppendLine("</body>");
+            emailContent.AppendLine("</html>");
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("your-email@example.com"); // Sender's email address
+                mail.To.Add(emailAddress); // Recipient's email address
+                mail.Subject = "Recipe Details and Invoice"; // Email subject
+                mail.Body = emailContent.ToString(); // Email body content
+                mail.IsBodyHtml = true; // Set to true if the email body contains HTML content
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.example.com"; // Your SMTP host
+                smtp.Port = 587; // Your SMTP port
+                smtp.Credentials = new System.Net.NetworkCredential("your-smtp-username", "your-smtp-password"); // Your SMTP credentials
+                smtp.EnableSsl = true; // Enable SSL/TLS
+
+                // Send the email
+                await smtp.SendMailAsync(mail);
+            }
+        }
+
+
+
+
         public IActionResult Logout()
         {
             // Remove the specific session variable "ChefId"

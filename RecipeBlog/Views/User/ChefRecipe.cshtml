@@ -129,6 +129,12 @@
                             <div>
                                 <a style="display: inline-block; background-color: #f1f1f1; color: #333; padding: 10px 20px; border-radius: 5px; margin-top: 10px; text-decoration: none;">What You need to cook it.<br />@recipeInfo.Recipe.Ingredients </a>
                             </div>
+                            <div>
+                                <form asp-action="Buy" asp-route-recipeId="@recipeInfo.Recipe.Recipeid" method="get">
+                                    <input type="hidden" name="recipeId" value="@recipeInfo.Recipe.Recipeid" />
+                                    <button type="submit" class="btn" style="margin-top: 10px; background-color: #ce2531; color: white;">Buy</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

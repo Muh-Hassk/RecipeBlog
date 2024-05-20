@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<style>
+    .container {
+        margin-top: 4rem;
+    }
+
+    .card {
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 85px;
+        margin-top: 100px;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: 60%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-body {
+        padding: 20px;
+        height: 290px; /* Adjust the height as needed */
+        width: 300px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Align items in the card body */
+    }
+
+    .text-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Ensure the container takes up the full height */
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #28a745; /* Green color for success */
+        border-color: #28a745;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838; /* Darker shade of green on hover */
+            border-color: #1e7e34;
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Payment Success</h2>
+                    <p>Your payment for @ViewBag.Recipe.Recipename was successful.</p>
+                    <p>Amount: $@ViewBag.Recipe.Price</p>
+                </div>
+                <div class="text-center mb-3">
+                    <a href="@Url.Action("ViewAll", "User")" class="btn btn-primary">Go Back to Recipes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

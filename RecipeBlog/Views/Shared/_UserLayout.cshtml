@@ -38,7 +38,7 @@
 </head>
 
 <body>
-
+      
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center justify-content-between">
@@ -51,11 +51,11 @@
 
             <nav id="navbar" class="navbar">
                 <ul>
-                    <li><a asp-action="Index">Home</a></li>
-                    <li><a asp-action="ViewAll">View All Recipes</a></li>
-                    <li><a asp-action="YourRecipes">See Your Owned Recipes</a></li>
-                    <li><a asp-action="Profile">Profile</a></li>
-                    <li><a asp-action="Logout">Logout</a></li>
+                    <li><a asp-controller="User" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="User" asp-action="ViewAll">View All Recipes</a></li>
+                    <li><a asp-controller="User" asp-action="YourRecipes">See Your Owned Recipes</a></li>
+                    <li><a asp-controller="User" asp-action="Profile">Profile</a></li>
+                    <li><a asp-controller="User" asp-action="Logout">Logout</a></li>
                 </ul>
             </nav><!-- .navbar -->
             <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
@@ -66,7 +66,7 @@
 
 
 
-
+    k
     <main id="main">
         @RenderBody()
     </main>

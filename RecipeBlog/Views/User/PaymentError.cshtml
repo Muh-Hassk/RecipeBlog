@@ -1,14 +1,60 @@
 ﻿@{
+    ViewData["Title"] = "Payment Error";
     Layout = null;
 }
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h2>Payment Error</h2>
-            <p>Sorry, there was an error processing your payment.</p>
-            <p>Please Make sure you have Balance to buy.</p>
-            <p>And Try Again.</p>
-            <a href="@Url.Action("ViewAll", "User")" class="btn btn-primary">Go Back to Recipes</a>
-        </div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #b200005c;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, border-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+            .btn-primary:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Payment Error</h2>
+        <p>Sorry, there was an error processing your payment.</p>
+        <p>Please make sure you have sufficient balance to buy.</p>
+        <p>And try again.</p>
+        <a href="@Url.Action("ViewAll", "User")" class="btn btn-primary">Go Back to Recipes</a>
     </div>
-</div>
+</body>
+</html>
