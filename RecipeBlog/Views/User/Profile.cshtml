@@ -1,0 +1,129 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<style>
+    .card {
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 20px;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+        height: 150px; /* Adjust the height as needed */
+        width: 300px;
+        overflow: hidden;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 15px;
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+    .search-form-container {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-input {
+        flex: 1;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .search-button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .section-header {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 0;
+            color: #333;
+        }
+
+        .section-header p {
+            margin-bottom: 0;
+            font-size: 25px;
+            color: #777;
+        }
+</style>
+
+
+
+<section id="recipes" class="recipes section-bg">
+    <div class="container" data-aos="fade-up">
+       
+
+        <div class="section-header">
+            <h2>Profile</h2>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h2>@Model.Firstname @Model.Lastname</h2>
+                        </div>
+                        <div class="card-body text-center">
+                            <h4>@Model.Username</h4>
+                            <p>@Model.Email</p>
+                            <a href="@Url.Action("EditProfile", "User")" class="btn btn-primary">Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

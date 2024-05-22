@@ -1,0 +1,41 @@
+﻿@model Testimonial
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<style>
+    /* Your existing styles */
+</style>
+
+<section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header">
+            <h2>Submit Your Testimonial</h2>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h2>Feel Free to say what's your thoughts</h2>
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="AddTestimonial" asp-controller="User" method="post">
+                                <div class="form-group">
+                                    <label asp-for="Testimonialtext">Testimonial</label>
+                                    <textarea asp-for="Testimonialtext" class="form-control" rows="5" placeholder="Write your testimonial here..."></textarea>
+                                    <span asp-validation-for="Testimonialtext" class="text-danger"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Submit Testimonial</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

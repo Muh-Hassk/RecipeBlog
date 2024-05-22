@@ -38,6 +38,91 @@ namespace RecipeBlog.Controllers
             return View(user);
         }
 
+
+        public IActionResult Profile()
+        {
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+
+            return View(user);
+        }
+        public IActionResult AddTestomonial()
+        {
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddTestimonial(Testimonial model)
+        {
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.SingleOrDefault(x => x.Userid == id);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+            if (ModelState.IsValid)
+            {
+                model.Userid = id;
+                model.Dateadded = DateTime.Now; // Set the date added
+                _context.Testimonials.Add(model);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "User");
+            }
+            // In case of invalid state, load the user again for the view
+            return View(model);
+        }
+
+
+
+        public IActionResult EditProfile()
+        {
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(User updatedUser)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            // Update user's information
+            user.Username = updatedUser.Username;
+            user.Email = updatedUser.Email;
+            user.Firstname = updatedUser.Firstname;
+            user.Lastname = updatedUser.Lastname;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Profile");
+        }
+
         public IActionResult ChefRecipe(int chefId)
         {
             var id = HttpContext.Session.GetInt32("UserId");
@@ -98,7 +183,32 @@ namespace RecipeBlog.Controllers
         }
 
 
+        public IActionResult YourRecipes()
+        {
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Userid == id).SingleOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            // I wanna List the Recipe that user Bought only 
+            var recipes = _context.Recipes.Where(x => x.Isaccepted == "Yes").ToList();
+            var chefs = _context.Users.Where(x => x.Roleid == 2).ToList();
+            var categories = _context.Recipecategories.ToList();
+            var payments = _context.Payments.Where(x => x.Userid == id);
+            // Assuming id is the user's ID
+            var recipeInfoList = from r in recipes
+                                 join p in payments on r.Recipeid equals p.Recipeid
+                                 where p.Userid == id
+                                 join c in chefs on r.Chefid equals c.Userid
+                                 join cat in categories on r.Categoryid equals cat.Categoryid
+                                 select new RecipeInfo { Recipe = r, Chef = c, Category = cat };
 
+            ViewBag.Recipes = recipeInfoList;
+
+            return View();
+
+        }
 
 
         public IActionResult ViewAll()
@@ -295,15 +405,20 @@ namespace RecipeBlog.Controllers
             }
 
             // Send recipe details to the user's email
-            await SendRecipeEmail(user.Email, recipe);
+            await SendRecipeEmail(recipeid);
 
             return View();
         }
 
         // Method to send recipe details to user's email
         // Method to send recipe details to user's email
-        private async Task SendRecipeEmail(string emailAddress, Recipe recipe)
+        private async Task SendRecipeEmail(int recipeId)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Userid == userId);
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(u => u.Recipeid == recipeId);
+
+
             StringBuilder emailContent = new StringBuilder();
             emailContent.AppendLine("<html>");
             emailContent.AppendLine("<head>");
@@ -334,7 +449,7 @@ namespace RecipeBlog.Controllers
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress("your-email@example.com"); // Sender's email address
-                mail.To.Add(emailAddress); // Recipient's email address
+                mail.To.Add(user.Email); // Recipient's email address
                 mail.Subject = "Recipe Details and Invoice"; // Email subject
                 mail.Body = emailContent.ToString(); // Email body content
                 mail.IsBodyHtml = true; // Set to true if the email body contains HTML content
@@ -364,13 +479,6 @@ namespace RecipeBlog.Controllers
 
         // PaymentViewModel.cs
 
-        public class PaymentViewModel
-        {
-            public Recipe Recipe { get; set; }
-            // Add other properties as needed for card information
-        }
-
-      
 
         public class RecipeInfo
         {
