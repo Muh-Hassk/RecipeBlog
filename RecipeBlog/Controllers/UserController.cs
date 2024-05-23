@@ -21,7 +21,27 @@ namespace RecipeBlog.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            // Retrieve RecipeCategories and Recipes from the database
+
+            var testimonials = _context.Testimonials.Where(u=> u.Isapproved == "Yes")
+                                           .Include(t => t.User)
+                                           .ToList();
+
+            ViewBag.Testomnials = testimonials;
+
+
+            var HomePage = _context.Homepages.FirstOrDefault();
+            var AboutUs = _context.Aboutuspages.FirstOrDefault();
+
+            ViewBag.HomePage = HomePage;
+            ViewBag.AboutUs = AboutUs;
+
+
+
+
+
+
+
+
             var recipeCategories = _context.Recipecategories.Include(rc => rc.Recipes.Where(x => x.Isaccepted == "Yes")).ToList();
 
             // Pass the data to the view
@@ -78,6 +98,7 @@ namespace RecipeBlog.Controllers
             {
                 model.Userid = id;
                 model.Dateadded = DateTime.Now; // Set the date added
+                model.Isapproved = "No";
                 _context.Testimonials.Add(model);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "User");

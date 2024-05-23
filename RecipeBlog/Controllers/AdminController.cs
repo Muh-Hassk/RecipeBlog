@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeBlog.Models;
 
@@ -7,9 +8,12 @@ namespace RecipeBlog.Controllers
     public class AdminController : Controller
     {
         private readonly ModelContext _context;
-        public AdminController(ModelContext? context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public AdminController(ModelContext? context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;   
         }
         public IActionResult Index()
         {
@@ -75,6 +79,237 @@ namespace RecipeBlog.Controllers
 
             return View(user);
         }
+        public IActionResult Home()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var Home = _context.Homepages.FirstOrDefault();
+
+            ViewBag.HomePage = Home;
+
+            return View(user);
+        }
+
+        public IActionResult EditHomePage()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var Home = _context.Homepages.FirstOrDefault();
+
+            ViewBag.HomePage = Home;
+
+            return View(Home);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditHomePage(Homepage model, IFormFile imageFile)
+        {
+            var homePage = _context.Homepages.FirstOrDefault();
+            if (homePage == null)
+            {
+                return NotFound();
+            }
+
+            // Store the existing image path
+            string existingImagePath = homePage.Imagepath;
+
+            // Check if a new image is provided
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // If a new image is provided, handle the file upload and update the image path
+                string wwwrootpath = _webHostEnvironment.WebRootPath;
+                string imageName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                string fullPath = Path.Combine(wwwrootpath, "images", imageName);
+
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                homePage.Imagepath = imageName;
+            }
+            else
+            {
+                // If no new image is provided, retain the existing image path
+                homePage.Imagepath = existingImagePath;
+            }
+
+            // Validate the model without considering the ImageFile property if no new image is provided
+            ModelState.Remove("ImageFile");
+
+            if (ModelState.IsValid)
+            {
+                // Update other properties of the homepage as needed
+                homePage.Pagecontent = model.Pagecontent;
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Home"); // Redirect to a success page
+            }
+
+            return View(model); // If the model state is invalid, return the view with validation errors 
+        }
+
+
+        public IActionResult AboutUs()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var AboutUs = _context.Aboutuspages.FirstOrDefault();
+
+            ViewBag.About = AboutUs;
+
+            return View(user);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditAboutUs(Aboutuspage model, IFormFile imageFile)
+        {
+            var AboutUs = _context.Aboutuspages.FirstOrDefault();
+            if (AboutUs == null)
+            {
+                return NotFound();
+            }
+
+            // Store the existing image path
+            string existingImagePath = AboutUs.Imagepath;
+
+            // Check if a new image is provided
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // If a new image is provided, handle the file upload and update the image path
+                string wwwrootpath = _webHostEnvironment.WebRootPath;
+                string imageName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+                string fullPath = Path.Combine(wwwrootpath, "images", imageName);
+
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                AboutUs.Imagepath = imageName;
+            }
+            else
+            {
+                // If no new image is provided, retain the existing image path
+                AboutUs.Imagepath = existingImagePath;
+            }
+
+            // Validate the model without considering the ImageFile property if no new image is provided
+            ModelState.Remove("ImageFile");
+
+            if (ModelState.IsValid)
+            {
+                // Update other properties of the homepage as needed
+                AboutUs.Pagecontent = model.Pagecontent;
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Home"); // Redirect to a success page
+            }
+
+            return View(model); // If the model state is invalid, return the view with validation errors 
+        }
+
+        public IActionResult ContactUs()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var Contactus = _context.Contactus.FirstOrDefault();
+
+            ViewBag.Contact = Contactus;
+
+            return View(user);
+        }
+        public IActionResult Testomonials()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var testimonials = _context.Testimonials
+                                           .Include(t => t.User)
+                                           .ToList();
+
+            ViewBag.Testomnials = testimonials;
+
+
+
+            return View(user);
+        }
+        [HttpPost]
+        public IActionResult ApproveTest(int Testimonialid)
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            var test = _context.Testimonials.FirstOrDefault(x => x.Testimonialid == Testimonialid);
+
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            // Update user's information
+            test.Isapproved = "Yes";
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Testomonials");
+        }
+
+        [HttpPost]
+        public IActionResult RejectTest(int Testimonialid)
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            var test = _context.Testimonials.FirstOrDefault(x => x.Testimonialid == Testimonialid);
+
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            // Update user's information
+            test.Isapproved = "No";
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Testomonials");
+        }
+
 
         [HttpPost]
         public IActionResult Profile(User updatedUser)
@@ -172,7 +407,7 @@ namespace RecipeBlog.Controllers
 
             return View();
         }
-        [HttpGet] // Add HttpGet attribute to handle GET requests
+        [HttpGet] 
         public IActionResult Reports()
         {
             var userId = HttpContext.Session.GetInt32("AdminId");

@@ -1,0 +1,67 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h1>About us Page</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-img-top">
+                    <img src="@Url.Content("~/images/" + ViewBag.About.Imagepath)" alt="Recipe Image" class="img-fluid">
+                </div>
+                <div class="card-body text-center">
+                    <h2> Page Content</h2>
+                    <p class="card-text">@ViewBag.About.Pagecontent</p>
+                    <form asp-controller="Admin" asp-action="EditHomePage" method="post">
+                        <button type="submit" class="btn btn-success btn-lg">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    h1{
+        text-align:center;
+    }
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top img {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        max-height: 400px; /* Adjust the height as needed */
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 30px; /* Increase padding for a larger card */
+    }
+
+    .btn-success {
+        background-color: #4caf50;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #45a049;
+        }
+
+    .btn-lg {
+        padding: 10px 30px; /* Increase button padding for a larger button */
+        font-size: 1.25rem; /* Increase button font size */
+    }
+</style>

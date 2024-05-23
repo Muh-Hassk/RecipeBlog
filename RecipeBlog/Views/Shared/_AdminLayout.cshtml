@@ -197,15 +197,24 @@
                             <span class="menu-title">Profile</span>
                             <i class="menu-arrow"></i>
                         </a>
-                    </li>
+                    </li>       
+
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                        <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
                             <i class="icon-contract menu-icon"></i>
                             <span class="menu-title">Manage Pages</span>
                             <i class="menu-arrow"></i>
                         </a>
+                        <div class="collapse" id="error">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Admin" asp-action="Testomonials">Testomonials</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Admin" asp-action="Home">Home</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Admin" asp-action="AboutUs">About us</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Admin" asp-action="ContactUs">Contact us</a></li>
+                            </ul>
+                        </div>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Admin" asp-action="Logout">
                             <i class="fas fa-sign-out-alt menu-icon"></i>

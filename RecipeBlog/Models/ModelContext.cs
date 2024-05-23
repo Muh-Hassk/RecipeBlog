@@ -15,7 +15,13 @@ public partial class ModelContext : DbContext
     {
     }
 
+    public virtual DbSet<Aboutuspage> Aboutuspages { get; set; }
+
     public virtual DbSet<Cardinfo> Cardinfos { get; set; }
+
+    public virtual DbSet<Contactu> Contactus { get; set; }
+
+    public virtual DbSet<Homepage> Homepages { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
 
@@ -42,6 +48,26 @@ public partial class ModelContext : DbContext
         modelBuilder
             .HasDefaultSchema("C##RECBLOG")
             .UseCollation("USING_NLS_COMP");
+
+        modelBuilder.Entity<Aboutuspage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ABOUTUSPAGE_PK");
+
+            entity.ToTable("ABOUTUSPAGE");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("NUMBER")
+                .HasColumnName("ID");
+            entity.Property(e => e.Imagepath)
+                .HasMaxLength(2000)
+                .IsUnicode(false)
+                .HasColumnName("IMAGEPATH");
+            entity.Property(e => e.Pagecontent)
+                .HasMaxLength(2000)
+                .IsUnicode(false)
+                .HasColumnName("PAGECONTENT");
+        });
 
         modelBuilder.Entity<Cardinfo>(entity =>
         {
@@ -75,6 +101,54 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Cardinfos)
                 .HasForeignKey(d => d.Userid)
                 .HasConstraintName("SYS_C008384");
+        });
+
+        modelBuilder.Entity<Contactu>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("CONTACTUS_PK");
+
+            entity.ToTable("CONTACTUS");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("NUMBER")
+                .HasColumnName("ID");
+            entity.Property(e => e.Address)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("ADDRESS");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("EMAIL");
+            entity.Property(e => e.Openhours)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("OPENHOURS");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("PHONE");
+        });
+
+        modelBuilder.Entity<Homepage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("HOMEPAGE_PK");
+
+            entity.ToTable("HOMEPAGE");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("NUMBER")
+                .HasColumnName("ID");
+            entity.Property(e => e.Imagepath)
+                .HasMaxLength(2000)
+                .IsUnicode(false)
+                .HasColumnName("IMAGEPATH");
+            entity.Property(e => e.Pagecontent)
+                .HasMaxLength(2000)
+                .IsUnicode(false)
+                .HasColumnName("PAGECONTENT");
         });
 
         modelBuilder.Entity<Payment>(entity =>
@@ -257,8 +331,13 @@ public partial class ModelContext : DbContext
                 .HasColumnType("NUMBER")
                 .HasColumnName("TESTIMONIALID");
             entity.Property(e => e.Dateadded)
+                .HasDefaultValueSql("SYSDATE ")
                 .HasColumnType("DATE")
                 .HasColumnName("DATEADDED");
+            entity.Property(e => e.Isapproved)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("ISAPPROVED");
             entity.Property(e => e.Testimonialtext)
                 .HasColumnType("CLOB")
                 .HasColumnName("TESTIMONIALTEXT");

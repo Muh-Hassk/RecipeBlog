@@ -13,5 +13,7 @@ public partial class Testimonial
 
     public DateTime? Dateadded { get; set; }
 
+    public string? Isapproved { get; set; }
+
     public virtual User? User { get; set; }
 }

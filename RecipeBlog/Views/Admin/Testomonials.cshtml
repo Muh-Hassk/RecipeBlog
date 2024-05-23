@@ -1,0 +1,107 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .testimonial-card {
+        max-width: 300px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .testimonial-content {
+        padding: 20px;
+    }
+
+    .testimonial-header {
+        margin-bottom: 10px;
+    }
+
+        .testimonial-header a {
+            color: #777;
+            font-size: 14px;
+            text-decoration: none;
+            margin-right: 55px;
+        }
+
+    .testimonial-text {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .testimonial-form {
+        margin-top: 10px;
+    }
+
+        .testimonial-form button {
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+    .approve-btn {
+        background-color: #4caf50;
+    }
+
+        .approve-btn:hover {
+            background-color: #45a049;
+        }
+
+    .reject-btn {
+        background-color: #dc3545;
+    }
+
+        .reject-btn:hover {
+            background-color: #c82333;
+        }
+
+    .approved {
+        background-color: #e6ffe6;
+        padding: 2px 5px;
+        border-radius: 5px;
+    }
+
+    .not-approved {
+        background-color: #ffe6e6;
+        padding: 2px 5px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="row gy-5">
+    @foreach (var testimonial in ViewBag.Testomnials)
+    {
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <div class="testimonial-header">
+                    <a href="#"><span></span>@testimonial.User.Firstname @testimonial.User.Lastname</a>
+                    <a href="#" class="@(testimonial.Isapproved == "Yes" ? "approved" : "not-approved")">@testimonial.Isapproved</a>
+
+                </div>
+                <h3 class="testimonial-text">
+                    @testimonial.Testimonialtext
+                </h3>
+                <form asp-controller="Admin" asp-action="ApproveTest" method="post" class="testimonial-form">
+                    <input type="hidden" name="Testimonialid" value="@testimonial.Testimonialid" />
+                    <button type="submit" class="approve-btn">Add To Home Page</button>
+                </form>
+                <form asp-controller="Admin" asp-action="RejectTest" method="post" class="testimonial-form">
+                    <input type="hidden" name="Testimonialid" value="@testimonial.Testimonialid" />
+                    <button type="submit" class="reject-btn">Delete From Home Page</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

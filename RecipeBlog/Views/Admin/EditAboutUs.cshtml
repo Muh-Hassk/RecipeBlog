@@ -1,0 +1,21 @@
+﻿@model Aboutuspage
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <h1>Update Page</h1>
+    <hr />
+    <form asp-action="EditAboutUs" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="pageContent">Page Content</label>
+            <textarea class="form-control" id="pageContent" name="Pagecontent" rows="5" required>@Model.Pagecontent</textarea>
+        </div>
+        <div class="form-group">
+            <label for="imageFile">HomePage Image</label>
+            <input type="file" class="form-control" id="imageFile" name="ImageFile" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
