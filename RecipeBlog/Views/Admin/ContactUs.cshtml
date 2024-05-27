@@ -1,1 +1,83 @@
-﻿
+﻿@model Contactu
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Contact Us";
+
+}
+<style>
+    .contact-info-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+        .contact-info-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-info-container .info-item {
+            margin-bottom: 15px;
+        }
+
+            .contact-info-container .info-item label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .contact-info-container .info-item p {
+                margin: 0;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #fff;
+            }
+
+        .contact-info-container .edit-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .contact-info-container .edit-button a {
+                display: inline-block;
+                padding: 10px 20px;
+                font-size: 16px;
+                width:200px;
+                color: #fff;
+                background-color: #007bff;
+                border-radius: 5px;
+                text-decoration: none;
+            }
+
+                .contact-info-container .edit-button a:hover {
+                    background-color: #0056b3;
+                }
+</style>
+
+<div class="contact-info-container">
+    <h2>Contact Information</h2>
+    <div class="info-item">
+        <label>Email:</label>
+        <p>@Model.Email</p>
+    </div>
+    <div class="info-item">
+        <label>Phone:</label>
+        <p>@Model.Phone</p>
+    </div>
+    <div class="info-item">
+        <label>Address:</label>
+        <p>@Model.Address</p>
+    </div>
+    <div class="info-item">
+        <label>Open Hours:</label>
+        <p>@Model.Openhours</p>
+    </div>
+    <div class="edit-button">
+        <a href="@Url.Action("EditContactUs", "Admin")">Edit</a>
+    </div>
+</div>

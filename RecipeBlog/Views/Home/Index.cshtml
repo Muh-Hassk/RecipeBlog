@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var imagePath = ViewBag.AboutUs.Imagepath;
+
 
 }
 <section id="menu" class="menu">
@@ -79,3 +81,45 @@
 
     </div>
 </section><!-- End Chefs Section -->
+
+
+<section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Testimonials</h2>
+            <p>What Are They <span>Saying About Us</span></p>
+        </div>
+
+        <div class="slides-1 swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper">
+                @foreach (var testimonial in ViewBag.Testomnials)
+                {
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <div class="row gy-4 justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="testimonial-content">
+                                        <p>
+                                            <i class="bi bi-quote quote-icon-left"></i>
+                                            @testimonial.Testimonialtext
+                                            <i class="bi bi-quote quote-icon-right"></i>
+                                        </p>
+                                        <h3>@testimonial.User.Firstname @testimonial.User.Lastname</h3>
+                                        <div class="stars">
+                                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 text-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End testimonial item -->
+                }
+            </div>
+        </div>
+    </div>
+</section>

@@ -24,8 +24,27 @@ namespace RecipeBlog.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            // Retrieve RecipeCategories and Recipes from the database
-            var recipeCategories = _context.Recipecategories.Include(rc => rc.Recipes.Where(x=>x.Isaccepted == "Yes")).ToList();
+            var testimonials = _context.Testimonials.Where(u => u.Isapproved == "Yes")
+                                           .Include(t => t.User)
+                                           .ToList();
+
+            ViewBag.Testomnials = testimonials;
+
+
+            var HomePage = _context.Homepages.FirstOrDefault();
+            var AboutUs = _context.Aboutuspages.FirstOrDefault();
+
+            ViewBag.HomePage = HomePage;
+            ViewBag.AboutUs = AboutUs;
+
+
+
+
+
+
+
+
+            var recipeCategories = _context.Recipecategories.Include(rc => rc.Recipes.Where(x => x.Isaccepted == "Yes")).ToList();
 
             // Pass the data to the view
             ViewBag.RecipeCategories = recipeCategories;

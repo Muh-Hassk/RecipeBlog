@@ -1,0 +1,85 @@
+﻿@model Contactu
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit Contact Us";
+
+}
+<style>
+    .edit-contact-info-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+        .edit-contact-info-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .edit-contact-info-container .form-group {
+            margin-bottom: 15px;
+        }
+
+            .edit-contact-info-container .form-group label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .edit-contact-info-container .form-group input,
+            .edit-contact-info-container .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+        .edit-contact-info-container .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .edit-contact-info-container .form-actions button {
+                padding: 10px 20px;
+                font-size: 16px;
+                width: 150px;
+                color: #fff;
+                background-color: #007bff;
+                border: none;
+                border-radius: 5px;
+                text-decoration: none;
+            }
+
+                .edit-contact-info-container .form-actions button:hover {
+                    background-color: #0056b3;
+                }
+</style>
+
+<div class="edit-contact-info-container">
+    <h2>Edit Contact Information</h2>
+    <form asp-action="EditContactUs" method="post">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input asp-for="Email" type="email" class="form-control" id="email" />
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input asp-for="Phone" type="text" class="form-control" id="phone" />
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea asp-for="Address" class="form-control" id="address"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="openhours">Open Hours</label>
+            <input asp-for="Openhours" type="text" class="form-control" id="openhours" />
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

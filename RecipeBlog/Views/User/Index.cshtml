@@ -1,8 +1,14 @@
 ﻿@model User
 @{
     Layout = "~/Views/Shared/_UserLayout.cshtml";
+    var imagePath = ViewBag.HomePage.Imagepath;
+    ViewData["Title"] = "Home Page";
 
 }
+
+
+
+
 
 <section id="hero" class="hero d-flex align-items-center section-bg">
     <div class="container">
@@ -12,7 +18,7 @@
                 <p data-aos="fade-up" data-aos-delay="100">@ViewBag.HomePage.Pagecontent</p>
             </div>
             <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
-                <img src="~/Home/assets/img/hero-img.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
+                <img src=@Url.Content("~/images/"+ViewBag.HomePage.Imagepath) class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
             </div>
         </div>
     </div>
@@ -27,7 +33,7 @@
         </div>
 
         <div class="row gy-4">
-            <div class="col-lg-7 position-relative about-img" style="background-image: url(/Home/assets/img/about.jpg) ;" data-aos="fade-up" data-aos-delay="150">
+            <div class="col-lg-7 position-relative about-img" style="background-image: url('/images/@imagePath')" ;" data-aos="fade-up" data-aos-delay="150">
                 
             </div>
             <div class="col-lg-5 d-flex align-items-end" data-aos="fade-up" data-aos-delay="300">

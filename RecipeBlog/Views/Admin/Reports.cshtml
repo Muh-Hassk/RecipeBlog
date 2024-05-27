@@ -1,9 +1,13 @@
-﻿@model User
+﻿@using System.Text.Json
+@model User
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Reports";
+
 }
 <link href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
     /* Style for the form */
@@ -11,19 +15,24 @@
         margin-bottom: 20px;
     }
 
-        .search-form .form-control {
-            margin-bottom: 10px;
-        }
+    .search-form .form-control {
+        margin-bottom: 10px;
+    }
 
     /* Style for the table */
     .table-card {
         margin-top: 20px;
     }
 
-        .table-card .card-title {
-            margin-bottom: 0;
-        }
+    .table-card .card-title {
+        margin-bottom: 0;
+    }
+
+    .chart-container {
+        margin-top: 20px;
+    }
 </style>
+
 <div class="row">
     <div class="col-6">
         <form action="Reports" method="post" class="search-form">
@@ -39,7 +48,8 @@
         </form>
     </div>
 </div>
-    <div class="p-3 bg-dark text-white text-center font-weight-bold">Report 1</div>
+
+<div class="p-3 bg-dark text-white text-center font-weight-bold">Report 1</div>
 <div class="row">
     <div class="col mb-4">
         <div class="card table-card">
@@ -70,12 +80,23 @@
                                 </tr>
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Total Sales Price</td>
+                                <td>@ViewBag.TotalPrice</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="chart-container">
+    <canvas id="salesChart"></canvas>
+</div>
+
 <div class="p-3 bg-dark text-white text-center font-weight-bold">Report 2</div>
 <div class="row">
     <div class="col">
@@ -86,35 +107,42 @@
                     <table class="table table-striped table-borderless example" id="example1">
                         <thead>
                             <tr>
-                            <th>Recipe Name</th>
-                            <th>Chef Username</th>
-                            <th>Category Name</th>
-                            <th>Ingredians</th>
-                            <th>Price</th>
-                            <th>Creating Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                                <th>Recipe Name</th>
+                                <th>Chef Username</th>
+                                <th>Category Name</th>
+                                <th>Ingredients</th>
+                                <th>Price</th>
+                                <th>Creating Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach (var recipeInfo in ViewBag.RecipeInfo)
                             {
-                            <tr>
-                                <td>@recipeInfo.Recipe.Recipename</td>
-                                <td>@recipeInfo.Chef.Username</td>
-                                <td>@recipeInfo.Category.Categoryname</td>
-                                <td>@recipeInfo.Recipe.Ingredients</td>
-                                <td>@recipeInfo.Recipe.Price</td>
-                                <td>@recipeInfo.Recipe.Createdate</td>
-                            </tr>
+                                <tr>
+                                    <td>@recipeInfo.Recipe.Recipename</td>
+                                    <td>@recipeInfo.Chef.Username</td>
+                                    <td>@recipeInfo.Category.Categoryname</td>
+                                    <td>@recipeInfo.Recipe.Ingredients</td>
+                                    <td>@recipeInfo.Recipe.Price</td>
+                                    <td>@recipeInfo.Recipe.Createdate</td>
+                                </tr>
                             }
-                    </tbody>
-                </table>
-
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Total Recipes Price</td>
+                                <td>@ViewBag.TotalRecipes</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<div class="chart-container">
+    <canvas id="RecipeChart"></canvas>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js" defer></script>
@@ -126,25 +154,94 @@
 
 <script>
     $(document).ready(function () {
-        $('#example').DataTable({
+        var salesTable = $('#example').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
                 'csvHtml5',
-                'pdfHtml5'
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        var canvas = document.querySelector('#salesChart');
+                        var chartData = canvas.toDataURL('image/png');
+
+                        doc.content.splice(1, 0, {
+                            image: chartData,
+                            width: 500
+                        });
+                    }
+                }
             ]
         });
-    });
-    $(document).ready(function () {
+
         $('#example1').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
                 'csvHtml5',
-                'pdfHtml5'
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        var canvas = document.querySelector('#RecipeChart');
+                        var chartData = canvas.toDataURL('image/png');
+
+                        doc.content.splice(1, 0, {
+                            image: chartData,
+                            width: 500
+                        });
+                    }
+                }
             ]
         });
+    });
+
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var salesData = @Html.Raw(ViewBag.SerializedPrices);
+    var salesLabels = @Html.Raw(ViewBag.SerializedLabels);
+    var salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: salesLabels,
+            datasets: [{
+                label: 'Sales',
+                data: salesData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+ var ctx = document.getElementById('RecipeChart').getContext('2d');
+    var salesData1 = @Html.Raw(ViewBag.SerializedPrices2);
+    var salesLabels1 = @Html.Raw(ViewBag.SerializedLabels2);
+    var salesChart1 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: salesLabels1,
+            datasets: [{
+                label: 'Price',
+                data: salesData1,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 </script>

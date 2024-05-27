@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeBlog.Models;
+using System.Text.Json;
+
 
 namespace RecipeBlog.Controllers
 {
@@ -78,6 +80,56 @@ namespace RecipeBlog.Controllers
             }
 
             return View(user);
+        }
+
+
+        public IActionResult ContactUs()
+        {
+
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+
+            var Info = _context.Contactus.FirstOrDefault();
+            return View(Info);
+        }
+
+        public IActionResult EditContactUs()
+        {
+            var userId = HttpContext.Session.GetInt32("AdminId");
+            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+
+            var Info = _context.Contactus.FirstOrDefault();
+            return View(Info);
+        }
+
+        [HttpPost]
+        public IActionResult EditContactUs(Contactu model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Update the contact information in the database
+                var Info = _context.Contactus.FirstOrDefault();
+                Info.Address = model.Address;
+                Info.Email = model.Email;
+                Info.Phone = model.Phone;
+                Info.Openhours = model.Openhours;
+                _context.Contactus.Update(Info);
+                _context.SaveChanges();
+                return RedirectToAction("ContactUs");
+            }
+            return View(model);
         }
         public IActionResult Home()
         {
@@ -230,22 +282,7 @@ namespace RecipeBlog.Controllers
             return View(model); // If the model state is invalid, return the view with validation errors 
         }
 
-        public IActionResult ContactUs()
-        {
-            var userId = HttpContext.Session.GetInt32("AdminId");
-            var user = _context.Users.FirstOrDefault(x => x.Userid == userId);
-
-            if (user == null)
-            {
-                return RedirectToAction("Login", "LoginAndRegister");
-            }
-
-            var Contactus = _context.Contactus.FirstOrDefault();
-
-            ViewBag.Contact = Contactus;
-
-            return View(user);
-        }
+        
         public IActionResult Testomonials()
         {
             var userId = HttpContext.Session.GetInt32("AdminId");
@@ -404,6 +441,12 @@ namespace RecipeBlog.Controllers
             ViewBag.RecipeInfo = recipeInfoList;
 
             ViewBag.RequstedInfo = recipePaymentsList;
+            ViewBag.SerializedPrices = JsonSerializer.Serialize(recipePaymentsList.Select(r => r.Recipe.Price).ToList());
+            ViewBag.SerializedLabels = JsonSerializer.Serialize(recipePaymentsList.Select(r => r.Recipe.Recipename).ToList());
+
+
+            ViewBag.SerializedPrices2 = JsonSerializer.Serialize(recipeInfoList.Select(r => r.Recipe.Price).ToList());
+            ViewBag.SerializedLabels2 = JsonSerializer.Serialize(recipeInfoList.Select(r => r.Recipe.Recipename).ToList());
 
             return View();
         }
@@ -438,6 +481,8 @@ namespace RecipeBlog.Controllers
                                       }).ToList();
 
 
+
+
             var chefs = _context.Users.Where(x => x.Roleid == 2).ToList();
 
             // Filter recipe info based on search start and end dates if provided
@@ -449,6 +494,27 @@ namespace RecipeBlog.Controllers
             ViewBag.RecipeInfo = recipeInfoList;
 
             ViewBag.RequstedInfo = recipePaymentsList;
+
+
+
+            // Calculate the total price
+            var totalPrice = recipePaymentsList.Sum(rp => rp.Payments.Paymentamount);
+
+            var RecipesAdded = recipeInfoList.Sum(rp => rp.Recipe.Price);
+
+
+            // Add total price to ViewBag
+            ViewBag.TotalPrice = totalPrice;
+            ViewBag.TotalRecipes = RecipesAdded;
+
+
+            //Charts
+            ViewBag.SerializedPrices = JsonSerializer.Serialize(recipePaymentsList.Select(r => r.Recipe.Price).ToList());
+            ViewBag.SerializedLabels = JsonSerializer.Serialize(recipePaymentsList.Select(r => r.Recipe.Recipename).ToList());
+
+            ViewBag.SerializedPrices2 = JsonSerializer.Serialize(recipeInfoList.Select(r => r.Recipe.Price).ToList());
+            ViewBag.SerializedLabels2 = JsonSerializer.Serialize(recipeInfoList.Select(r => r.Recipe.Recipename).ToList());
+
 
             return View();
         }

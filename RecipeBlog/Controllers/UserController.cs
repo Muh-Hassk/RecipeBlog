@@ -469,16 +469,17 @@ namespace RecipeBlog.Controllers
 
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("your-email@example.com"); // Sender's email address
+                
+                mail.From = new MailAddress("recipeblogtahaluf@gmail.com"); // Sender's email address
                 mail.To.Add(user.Email); // Recipient's email address
                 mail.Subject = "Recipe Details and Invoice"; // Email subject
                 mail.Body = emailContent.ToString(); // Email body content
                 mail.IsBodyHtml = true; // Set to true if the email body contains HTML content
 
                 SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.example.com"; // Your SMTP host
+                smtp.Host = "smtp.gmail.com"; // Your SMTP host
                 smtp.Port = 587; // Your SMTP port
-                smtp.Credentials = new System.Net.NetworkCredential("your-smtp-username", "your-smtp-password"); // Your SMTP credentials
+                smtp.Credentials = new System.Net.NetworkCredential("recipeblogtahaluf@gmail.com", "onbkrbaamxlevbev"); // Your SMTP credentials
                 smtp.EnableSsl = true; // Enable SSL/TLS
 
                 // Send the email

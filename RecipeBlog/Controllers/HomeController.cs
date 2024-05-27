@@ -30,7 +30,15 @@ namespace RecipeBlog.Controllers
                 // Retrieve the first three chefs from the database
                 var chefs = _context.Users.Where(x=> x.Roleid == 2 && x.Imagepath != null).ToList();
 
-         
+            var testimonials = _context.Testimonials.Where(u => u.Isapproved == "Yes")
+                                           .Include(t => t.User)
+                                           .ToList();
+
+            ViewBag.Testomnials = testimonials;
+            var AboutUs = _context.Aboutuspages.FirstOrDefault();
+            ViewBag.AboutUs = AboutUs;
+
+
             // Pass the data to the view
             ViewBag.Chefs = chefs;
 

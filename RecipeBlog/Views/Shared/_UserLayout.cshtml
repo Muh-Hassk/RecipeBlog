@@ -1,11 +1,17 @@
-﻿<!DOCTYPE html>
+﻿namespace RecipeBlog
+@{
+    var dbContext = new ModelContext();
+    var contactUs = dbContext.Contactus.FirstOrDefault();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Yummy Bootstrap Template - Index</title>
+    <title>@ViewData["Title"] - Recipe Blog</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -72,6 +78,7 @@
         @RenderBody()
     </main>
 
+
     <footer id="footer" class="footer">
 
         <div class="container">
@@ -81,8 +88,7 @@
                     <div>
                         <h4>Address</h4>
                         <p>
-                            A108 Adam Street <br>
-                            New York, NY 535022 - US<br>
+                            @contactUs?.Address
                         </p>
                     </div>
 
@@ -93,8 +99,8 @@
                     <div>
                         <h4>Reservations</h4>
                         <p>
-                            <strong>Phone:</strong> +1 5589 55488 55<br>
-                            <strong>Email:</strong> info@example.com<br>
+                            <strong>Phone:</strong> @contactUs?.Phone<br>
+                            <strong>Email:</strong> @contactUs?.Email<br>
                         </p>
                     </div>
                 </div>
@@ -104,8 +110,7 @@
                     <div>
                         <h4>Opening Hours</h4>
                         <p>
-                            <strong>Mon-Sat: 11AM</strong> - 23PM<br>
-                            Sunday: Closed
+                            <strong> @contactUs?.Openhours </strong>
                         </p>
                     </div>
                 </div>
